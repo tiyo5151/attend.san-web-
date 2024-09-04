@@ -4,7 +4,7 @@ import useTodoData from '@/hooks/SWR/useTodoData';
 import { useState } from 'react';
 import { useSWRConfig } from 'swr';
 
-const postNewTodo = async (newTodo: string) => {
+const addNewTodo = async (newTodo: string) => {
   const response = await fetch('/api/todo', {
     method: 'POST',
     headers: {
@@ -12,8 +12,24 @@ const postNewTodo = async (newTodo: string) => {
     },
     body: JSON.stringify({ title: newTodo }),
   });
+
   if (!response.ok) {
     console.error('Failed to add new todo');
+    return;
+  }
+};
+
+const deleteTodo = async (id: string) => {
+  const response = await fetch(`/api/todo`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ id }),
+  });
+
+  if (!response.ok) {
+    console.error('Failed to delete todo');
     return;
   }
 };
@@ -44,7 +60,7 @@ const TodoPage = () => {
     setNewTodo('');
     if (!newTodo) return;
     await mutate('/api/todo', async () => {
-      await postNewTodo(newTodo);
+      await addNewTodo(newTodo);
       return {
         data: [
           ...todos,
@@ -55,6 +71,18 @@ const TodoPage = () => {
             createdAt: new Date().toISOString(),
           },
         ],
+        revalidate: false,
+        populateCache: true,
+        rollbackOnError: true,
+      };
+    });
+  };
+
+  const handleDelete = async (id: string) => {
+    await mutate('/api/todo', async () => {
+      await deleteTodo(id);
+      return {
+        data: todos.filter((todo) => todo.id !== id),
         revalidate: false,
         populateCache: true,
         rollbackOnError: true,
@@ -104,6 +132,12 @@ const TodoPage = () => {
                   {todo.title}
                 </label>
               </div>
+              <button
+                className='rounded-md bg-red-600 px-2 py-1.5 text-xs font-medium text-white'
+                onClick={() => handleDelete(todo.id)}
+              >
+                Delete
+              </button>
             </div>
           ))}
         </div>

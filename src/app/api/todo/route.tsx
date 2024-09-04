@@ -13,7 +13,6 @@ export const GET = async (req: Request, res: NextResponse) =>
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
     const userId = session.user.id;
-    // const userId = 'cm0m8xwnu0000a9a6whye26a0';
 
     const todos = await prisma.todo.findMany({
       where: {
@@ -24,6 +23,9 @@ export const GET = async (req: Request, res: NextResponse) =>
         title: true,
         completed: true,
         createdAt: true,
+      },
+      orderBy: {
+        createdAt: 'desc',
       },
     });
     return NextResponse.json({ message: 'success', data: todos });
@@ -52,4 +54,24 @@ export const POST = async (req: Request, res: NextResponse) =>
       },
     });
     return NextResponse.json({ message: 'success', data: todo }, { status: 201 });
+  });
+
+export const DELETE = async (req: Request, res: NextResponse) =>
+  handleAPIError(async () => {
+    dbConnect();
+
+    const session = await auth();
+    if (!session || !session.user) {
+      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
+    }
+    const userId = session.user.id;
+
+    const { id } = await req.json();
+
+    const todo = await prisma.todo.delete({
+      where: {
+        id,
+      },
+    });
+    return NextResponse.json({ message: 'success', data: todo });
   });
