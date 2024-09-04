@@ -1,6 +1,9 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+#### Next.jsのフルスタックテンプレートです
+(App Router), TailWind CSS,  NextAuth v5, PostgreSQL, Prisma が使えるテンプレートです
 
-## Getting Started
+- frontend : 
+
+## 
 
 First, run the development server:
 
