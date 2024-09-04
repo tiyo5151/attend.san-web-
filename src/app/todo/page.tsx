@@ -20,7 +20,7 @@ const addNewTodo = async (newTodo: string) => {
 };
 
 const deleteTodo = async (id: string) => {
-  const response = await fetch(`/api/todo`, {
+  const response = await fetch('/api/todo', {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
@@ -30,6 +30,21 @@ const deleteTodo = async (id: string) => {
 
   if (!response.ok) {
     console.error('Failed to delete todo');
+    return;
+  }
+};
+
+const toggleTodo = async (id: string, completed: boolean) => {
+  const response = await fetch('/api/todo', {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ id, completed }),
+  });
+
+  if (!response.ok) {
+    console.error('Failed to toggle todo');
     return;
   }
 };
@@ -90,6 +105,26 @@ const TodoPage = () => {
     });
   };
 
+  const handleToggle = async (id: string) => {
+    const todo = todos.find((todo) => todo.id === id);
+    if (!todo) {
+      console.error('Todo not found');
+      return;
+    }
+
+    await mutate('/api/todo', async () => {
+      await toggleTodo(id, !todo.completed);
+      return {
+        data: todos.map((todo) =>
+          todo.id === id ? { ...todo, completed: !todo.completed } : todo,
+        ),
+        revalidate: false,
+        populateCache: true,
+        rollbackOnError: true,
+      };
+    });
+  };
+
   return (
     <div className='flex min-h-screen items-center justify-center bg-gray-100 p-4'>
       <div className='w-full max-w-md rounded-lg bg-white p-6 shadow-lg'>
@@ -124,6 +159,7 @@ const TodoPage = () => {
                   checked={todo.completed}
                   className='size-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500'
                   readOnly
+                  onClick={() => handleToggle(todo.id)}
                 />
                 <label
                   htmlFor={`todo-${todo.id}`}

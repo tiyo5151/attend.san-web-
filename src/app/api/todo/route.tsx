@@ -75,3 +75,20 @@ export const DELETE = async (req: Request, res: NextResponse) =>
     });
     return NextResponse.json({ message: 'success', data: todo });
   });
+
+export const PUT = async (req: Request, res: NextResponse) =>
+  handleAPIError(async () => {
+    dbConnect();
+
+    const { id, completed } = await req.json();
+
+    const todo = await prisma.todo.update({
+      where: {
+        id,
+      },
+      data: {
+        completed,
+      },
+    });
+    return NextResponse.json({ message: 'success', data: todo });
+  });
