@@ -1,4 +1,4 @@
-## Next.jsのフルスタックテンプレートです
+## Next.jsのフルスタックテンプレート
 
 (App Router), TailWind CSS, NextAuth v5, PostgreSQL, Prisma が使えるテンプレートです
 
