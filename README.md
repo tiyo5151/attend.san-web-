@@ -27,7 +27,7 @@ $ npm i
 $ cp .env.local.example .env.local
 ```
 
-先述したようにOAuthの環境変数を設定してください
+先述したようにNextAuthの環境変数を設定してください
 
 ```bash
 AUTH_GOOGLE_ID="*****************************************"
