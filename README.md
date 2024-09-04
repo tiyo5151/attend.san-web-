@@ -1,39 +1,88 @@
 #### Next.jsのフルスタックテンプレートです
-(App Router), TailWind CSS,  NextAuth v5, PostgreSQL, Prisma が使えるテンプレートです
 
-- frontend : 
+(App Router), TailWind CSS, NextAuth v5, PostgreSQL, Prisma が使えるテンプレートです
 
-## 
+- frontend : Next.js(App Router)
+- backend : Next.js Route Handler
+- auth : NextAuth v5
+- db ORM : PostgreSQL, Prisma
+- css : TailWind CSS
+- formatter : Prettier, ESLint
 
-First, run the development server:
+NextAuthは初期でGoogle認証を設定されていますがOAuthの環境変数を設定する必要があります[NextAuth v5 Documentation](https://authjs.dev/getting-started/authentication/oauth)
+
+## 開発手順
+
+### 1.npmパッケージのインストール
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+$ npm i
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2.環境変数の設定
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+もし認証を使わない場合は無視してください
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+```bash
+$ cp .env.local.example .env.local
+```
 
-## Learn More
+先述したようにOAuthの環境変数を設定してください
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+AUTH_GOOGLE_ID="*****************************************"
+AUTH_GOOGLE_SECRET="*****************************************"
+NEXTAUTH_SECRET=*****************************************
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 3.Dockerの起動
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+```bash
+$ docker-compose up -d
+```
 
-## Deploy on Vercel
+### 4.Prismaのセットアップ
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+$ npx prisma migrate dev
+$ npx prisma generate
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### 5.開発サーバーの起動
+
+```bash
+$ npm run dev
+```
+
+Webサーバーは[http://localhost:3000](http://localhost:3000)でアクセスできます
+
+## 開発
+
+### 初期ページ
+
+localhost:3000が初期ページです
+初期ページにはログイン、ログアウトボタンが表示されます
+ログインするとユーザーのセッション情報が表示されます
+
+`/todo`にアクセスすると開発の例としてTodoリストが表示されます
+
+### Prisma
+
+Prismaのスキーマを変更した場合は以下のコマンドを実行してください
+
+```bash
+$ npx prisma db push
+$ npx prisma generate
+```
+
+Prismaのdbの確認は以下のコマンドを実行してください
+
+```bash
+$ npx prisma studio
+```
+
+[localhost:5555](http://localhost:5555)でアクセスできます
+
+### 認証
+
+他の認証プロバイダーを使いたい場合は[NextAuth v5 Documentation](https://authjs.dev/getting-started/authentication/oauth)を参照してください
