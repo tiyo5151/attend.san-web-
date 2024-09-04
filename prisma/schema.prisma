@@ -23,6 +23,8 @@ model User {
   sessions      Session[]
   // Optional for WebAuthn support
   Authenticator Authenticator[]
+
+  todos todo[]
  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -81,4 +83,14 @@ model Authenticator {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
  
   @@id([userId, credentialID])
+}
+
+model todo {
+  id       String   @id @default(cuid())
+  title     String
+  completed Boolean
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
