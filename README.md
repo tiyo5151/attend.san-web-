@@ -1,4 +1,4 @@
-#### Next.jsのフルスタックテンプレートです
+## Next.jsのフルスタックテンプレート
 
 (App Router), TailWind CSS, NextAuth v5, PostgreSQL, Prisma が使えるテンプレートです
 
@@ -27,7 +27,7 @@ $ npm i
 $ cp .env.local.example .env.local
 ```
 
-先述したようにOAuthの環境変数を設定してください
+先述したようにNextAuthの環境変数を設定してください
 
 ```bash
 AUTH_GOOGLE_ID="*****************************************"
