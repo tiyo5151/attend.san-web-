@@ -6,7 +6,7 @@
 - backend : Next.js Route Handler
 - auth : NextAuth v5
 - db ORM : PostgreSQL, Prisma
-- css : TailWind CSS
+- css : Tailwind CSS
 - formatter : Prettier, ESLint
 
 NextAuthは初期でGoogle認証を設定されていますがOAuthの環境変数を設定する必要があります[NextAuth v5 Documentation](https://authjs.dev/getting-started/authentication/oauth)
