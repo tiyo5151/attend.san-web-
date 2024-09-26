@@ -24,7 +24,7 @@ $ npm i
 もし認証を使わない場合は無視してください
 
 ```bash
-$ cp .env.local.example .env.local
+$ cp .env.example .env
 ```
 
 先述したようにNextAuthの環境変数を設定してください
