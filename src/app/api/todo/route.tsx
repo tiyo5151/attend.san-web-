@@ -1,4 +1,3 @@
-import { dbConnect } from '@/lib/dbConnect';
 import { handleAPIError } from '@/lib/handleAPIError';
 import { prisma } from '@/lib/prisma';
 import { NextResponse } from 'next/server';
@@ -6,8 +5,6 @@ import { auth } from '../../../../auth';
 
 export const GET = async (req: Request, res: NextResponse) =>
   handleAPIError(async () => {
-    dbConnect();
-
     const session = await auth();
     if (!session || !session.user) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
@@ -33,9 +30,6 @@ export const GET = async (req: Request, res: NextResponse) =>
 
 export const POST = async (req: Request, res: NextResponse) =>
   handleAPIError(async () => {
-    dbConnect();
-    console.log('success');
-
     const session = await auth();
     if (!session || !session.user) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
@@ -58,8 +52,6 @@ export const POST = async (req: Request, res: NextResponse) =>
 
 export const DELETE = async (req: Request, res: NextResponse) =>
   handleAPIError(async () => {
-    dbConnect();
-
     const session = await auth();
     if (!session || !session.user) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
@@ -78,8 +70,6 @@ export const DELETE = async (req: Request, res: NextResponse) =>
 
 export const PUT = async (req: Request, res: NextResponse) =>
   handleAPIError(async () => {
-    dbConnect();
-
     const { id, completed } = await req.json();
 
     const todo = await prisma.todo.update({

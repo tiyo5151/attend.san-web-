@@ -24,10 +24,6 @@ const Home = async () => {
           </div>
         )}
       </div>
-      <div className='w-10/12 rounded-xl bg-slate-200'>
-        <div className='rounded-t-xl bg-slate-400 p-3'>current session</div>
-        <pre className='break-words p-3'>{JSON.stringify(session, null, 2)}</pre>
-      </div>
     </div>
   );
 };
