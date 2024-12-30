@@ -94,7 +94,7 @@ model Attendance {
   user User @relation(fields: [userId], references: [id])
   userId String
   semester String //学期を区別するために使用
-  class String //出席したクラスを記録
+  className String //出席したクラスを記録
   createdAt DateTime @default(now())
 }
 
