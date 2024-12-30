@@ -93,14 +93,21 @@ model TimeTable {
   user User @relation(fields: [userId], references: [id])
   userId String
   className String
-  period Int //何限目かを表すカラム
+  periodId Int //何限目かを表すカラム
+  period Period @relation(fields: [periodId], references: [periodNumber])
   day Int //曜日を表すカラム
-  beingTime String //授業の開始時間
-  endTime String //授業の終了時間
   createdAt DateTime @default(now())
 }
 
-
+//授業の時間を管理するためのテーブル
+//例えば、periodNumber = 1 (1限目)の場合、beginTime = 9:00, endTime = 10:30
+model Period {
+  periodNumber Int @id //何限目かを表すカラム
+  beginTime String
+  endTime String
+  timeTable TimeTable[]
+  createdAt DateTime @default(now())
+}
 
 
 model Attendance {
