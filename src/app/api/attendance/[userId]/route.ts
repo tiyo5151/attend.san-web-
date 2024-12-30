@@ -5,12 +5,13 @@ import { NextResponse } from 'next/server';
 export const POST = async (req: Request, res: NextResponse) =>
   handleAPIError(async () => {
     const userId = req.url.split('attendance/')[1];
-    const { semester, className } = await req.json();
+    // const { semester } = await req.json();
+    //semesterカラムは使うかわからないので仮で1を入れている
+    const semester = '1';
 
     const newAttendance = await prisma.attendance.create({
       data: {
         semester,
-        className,
         user: {
           connect: {
             id: userId,
