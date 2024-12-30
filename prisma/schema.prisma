@@ -23,13 +23,13 @@ model User {
   sessions      Session[]
   // Optional for WebAuthn support
   Authenticator Authenticator[]
-
+  timetable TimeTable[]
   attendance Attendance[]
   attendSan AttendSan[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  timetable String? //時間割(json)
+  
 }
 
 model Account {
@@ -86,6 +86,20 @@ model Authenticator {
 
   @@id([userId, credentialID])
 }
+
+
+model TimeTable {
+  id String @id @default(cuid())
+  user User @relation(fields: [userId], references: [id])
+  userId String
+  className String
+  period Int //何限目かを表すカラム
+  day Int //曜日を表すカラム
+  beingTime String //授業の開始時間
+  endTime String //授業の終了時間
+  createdAt DateTime @default(now())
+}
+
 
 
 
