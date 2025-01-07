@@ -89,15 +89,27 @@ model Authenticator {
 
 
 model TimeTable {
-  id String @id @default(cuid())
-  user User @relation(fields: [userId], references: [id])
   userId String
-  className String
+  user User @relation(fields: [userId], references: [id])
+  lectureId String //授業ID
+  lecture Lecture @relation(fields: [lectureId], references: [id])
   periodNumber Int //何限目かを表すカラム
   period Period @relation(fields: [periodNumber], references: [periodNumber])
-  day Int //曜日を表すカラム
+  day  Day  //曜日を表すカラム
   createdAt DateTime @default(now())
+
+  @@id([userId , lectureId])
 }
+
+enum Day {
+  月曜日
+  火曜日
+  水曜日  
+  木曜日
+  金曜日
+  土曜日
+}
+
 
 //授業の時間を管理するためのテーブル
 //例えば、periodNumber = 1 (1限目)の場合、beginTime = 9:00, endTime = 10:30
@@ -114,7 +126,6 @@ model Attendance {
   id String @id @default(cuid())
   user User @relation(fields: [userId], references: [id])
   userId String
-  semester String //学期を区別するために使用
   lectureId String //授業ID
   lecture Lecture @relation(fields: [lectureId], references: [id])
   createdAt DateTime @default(now())
@@ -124,7 +135,9 @@ model Lecture{
   id String @id @default(cuid())
   name String
   NumberOfLectures Int //授業の回数
+  semester String //学期を区別するために使用
   attendance Attendance[]
+  timeTable TimeTable[]
   updatedAt DateTime @updatedAt
   createdAt DateTime @default(now())
 }
