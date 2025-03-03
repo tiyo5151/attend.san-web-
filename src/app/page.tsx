@@ -3,7 +3,6 @@ import HomeScreen from '@/components/page';
 import SignIn from '@/components/SignIn';
 
 const Home = async () => {
-  'use server';
   const session = await auth();
   if (!session?.user?.image) return <SignIn />;
   return (
