@@ -1,6 +1,6 @@
+import { auth } from '@/auth';
 import HomeScreen from '@/components/page';
 import SignIn from '@/components/SignIn';
-import { auth } from '../../auth';
 
 const Home = async () => {
   'use server';
