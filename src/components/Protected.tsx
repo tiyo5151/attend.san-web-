@@ -1,11 +1,10 @@
 'use client';
 import { Button } from '@/components/ui/button';
 import { signIn, useSession } from 'next-auth/react';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 
 export const Protected = ({ children }: { children: React.ReactNode }) => {
   const { status } = useSession();
-  const router = useRouter();
   const pathname = usePathname();
 
   if (status === 'unauthenticated') {
@@ -21,24 +20,10 @@ export const Protected = ({ children }: { children: React.ReactNode }) => {
           >
             ログイン
           </span>
-          または
-          <span
-            role='button'
-            className='px-1 underline'
-            onClick={() => router.push(`/sign-up?redirect=${encodeURIComponent(pathname)}`)}
-          >
-            新規登録
-          </span>
           が必要です。
         </p>
         <div className='flex gap-2'>
           <Button onClick={() => signIn('google', { redirectTo: pathname })}>ログイン</Button>
-          <Button
-            variant='outline'
-            onClick={() => router.push(`/sign-up?redirect=${encodeURIComponent(pathname)}`)}
-          >
-            新規登録
-          </Button>
         </div>
       </div>
     );
