@@ -1,24 +1,16 @@
-'use client';
-
+import { auth } from '@/auth';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
+import { UserMenu } from '@/components/UserMenu';
 
-const HomeScreen = () => {
+const HomeScreen = async () => {
   const progress = 50;
+  const session = await auth();
   return (
     <div className='container mx-auto grid grid-cols-1 gap-4 p-4 md:grid-cols-2 lg:grid-cols-3'>
-      <Card className='col-span-1 p-4'>
-        <div className='flex items-center space-x-4'>
-          <Avatar>
-            <AvatarImage src='/placeholder.svg' />
-            <AvatarFallback>UN</AvatarFallback>
-          </Avatar>
-          <div>
-            <h2 className='text-xl font-bold'>ユーザー名</h2>
-            <p className='text-muted-foreground text-sm'>@username</p>
-          </div>
-        </div>
+      <Card className='col-span-1 flex items-center p-1'>
+        <UserMenu user={session?.user} className='size-full rounded-lg' />
       </Card>
 
       <Card className='col-span-1 p-4'>
