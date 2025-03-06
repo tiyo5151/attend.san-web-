@@ -99,18 +99,18 @@ model TimeTable {
   day Day @relation(fields: [dayNumber] , references: [dayNumber])
   createdAt DateTime @default(now())
 
-  @@id([userId , lectureId])
+  @@id([userId , lectureId , periodNumber , dayNumber])
 }
 
 
 //登録するレコード
 //dayNumber day
 //0 月曜日
-//2 火曜日
-//3 水曜日
-//4 木曜日
-//5 金曜日
-//6 土曜日
+//1 火曜日
+//2 水曜日
+//3 木曜日
+//4 金曜日
+//5 土曜日
 
 model Day {
   dayNumber Int @id
