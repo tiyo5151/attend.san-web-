@@ -95,24 +95,44 @@ model TimeTable {
   lecture Lecture @relation(fields: [lectureId], references: [id])
   periodNumber Int //何限目かを表すカラム
   period Period @relation(fields: [periodNumber], references: [periodNumber])
-  day  Day  //曜日を表すカラム
+  dayNumber  Int  //曜日を表すカラム
+  day Day @relation(fields: [dayNumber] , references: [dayNumber])
   createdAt DateTime @default(now())
 
-  @@id([userId , lectureId])
+  @@id([userId , lectureId , periodNumber , dayNumber])
 }
 
-enum Day {
-  月曜日
-  火曜日
-  水曜日  
-  木曜日
-  金曜日
-  土曜日
+
+//登録するレコード
+//dayNumber day
+//0 月曜日
+//1 火曜日
+//2 水曜日
+//3 木曜日
+//4 金曜日
+//5 土曜日
+
+model Day {
+  dayNumber Int @id
+  day String @unique
+  timeTable TimeTable[]
 }
+
+
+
 
 
 //授業の時間を管理するためのテーブル
 //例えば、periodNumber = 1 (1限目)の場合、beginTime = 9:00, endTime = 10:30
+
+//登録するレコード
+// periodNumber   beginTime   endTime
+// 1		 9:00    	10:30
+// 2		10:40		12:10
+// 3		13:00		14:30
+// 4		14:45		16:15
+// 5		16:30		18:00
+// 6		18:15		19:45	
 model Period {
   periodNumber Int @id //何限目かを表すカラム
   beginTime String
@@ -133,9 +153,9 @@ model Attendance {
 
 model Lecture{
   id String @id @default(cuid())
-  name String
-  NumberOfLectures Int //授業の回数
-  semester String //学期を区別するために使用
+  name String @unique
+  NumberOfLectures Int? //授業の回数
+  semester String? //学期を区別するために使用
   attendance Attendance[]
   timeTable TimeTable[]
   updatedAt DateTime @updatedAt
