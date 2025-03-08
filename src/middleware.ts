@@ -98,3 +98,11 @@
 // export default chainMiddlewares([withIpRestriction, withLogin]);
 
 export { auth as middleware } from '@/auth';
+
+// どのパスにミドルウェアを適用するかを指定
+export const config = {
+  matcher: [
+    // 認証APIパス、ログインページ、静的ファイル、画像などは除外
+    '/((?!api/auth|login|_next/static|_next/image|favicon.ico).*)',
+  ],
+};

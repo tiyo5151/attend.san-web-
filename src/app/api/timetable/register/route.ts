@@ -38,13 +38,7 @@ const registerLectureFacade = async (
   if (isLectureExist) {
     const lectureId = await getLectureId(lectureName);
 
-<<<<<<< Updated upstream
-    if (lectureId) {
-      await registerLectureToTimeTable(lectureId, periodNumber, dayNumber);
-    }
-=======
     await registerLectureToTimeTable(lectureId!, periodNumber, dayNumber);
->>>>>>> Stashed changes
   } else {
     const NewLecture = await registerLecture(lectureName);
 
