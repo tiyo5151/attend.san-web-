@@ -38,9 +38,7 @@ const registerLectureFacade = async (
   if (isLectureExist) {
     const lectureId = await getLectureId(lectureName);
 
-    if (lectureId) {
-      await registerLectureToTimeTable(lectureId, periodNumber, dayNumber);
-    }
+    await registerLectureToTimeTable(lectureId!, periodNumber, dayNumber);
   } else {
     const NewLecture = await registerLecture(lectureName);
 
