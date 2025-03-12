@@ -9,8 +9,6 @@ export const POST = async (req: NextRequest) =>
   handleAPIError(async () => {
     const { timeTableJsonText } = await req.json();
 
-
-
     const objectTimeTable = JSON.parse(timeTableJsonText) as TimeTable;
 
     Object.entries(objectTimeTable).map(([periodNumber, lectures]) => {
