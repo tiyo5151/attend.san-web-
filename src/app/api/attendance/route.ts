@@ -6,7 +6,7 @@ import { NextResponse } from 'next/server';
 export const POST = async (req: Request) =>
   handleAPIError(async () => {
     //nowTime : HH:mm形式の現在時刻
-    //day : 曜日(文字列)
+    //day : 曜日(文字列 ex. '月曜日')
     const { nowTime, day } = await req.json();
 
     const session = await auth();
