@@ -9,11 +9,7 @@ type TimeTable = {
 
 export const POST = async (req: NextRequest) =>
   handleAPIError(async () => {
-    // const { timeTableJsonText } = await req.json();
-
-    //デモのjsonデータ
-    const timeTableJsonText =
-      '{"1":["","","","","リスニング・スピーキング演習II/リスニング・スピーキング演習II(英語)/リスニング・スピーキング演習II(日本語)英語12",""],"2":["","リスニング・スピーキング演習II/リスニング・スピーキング演習II(英語)/リスニング・スピーキング演習II(日本語)英語12","情報連携学概論II","リーディング・ライティング演習II/リーディング・ライティング演習II(英語)/リーディング・ライティング演習II(日本語)英語7","",""],"3":["","","情報連携基礎実習II/情報連携実習IB3","","",""],"4":["","","","コンピュータ・サイエンス概論II4","情報連携のための数学A/情報連携のための数学I2",""],"5":["コンピュータ・サイエンス概論II4","","","","コンピュータ・サイエンス基礎演習II/情報連携基礎演習II7",""],"6":["","","マクロ経済学日本語","","",""],"7":["","","","","",""],"8":["","","","","",""]}';
+    const { timeTableJsonText } = await req.json();
 
     const objectTimeTable = JSON.parse(timeTableJsonText) as TimeTable;
 
