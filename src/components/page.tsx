@@ -1,4 +1,5 @@
 import { auth } from '@/auth';
+import ImportTimeTableButton from '@/components/ImportTimeTableButton';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
@@ -43,6 +44,7 @@ const HomeScreen = async () => {
       subject: 'マクロ経済学日本語',
     },
   ];
+
   return (
     <div className='container mx-auto grid grid-cols-1 gap-4 p-4 md:grid-cols-2 lg:grid-cols-3'>
       <Card className='col-span-1 flex items-center p-1'>
@@ -60,7 +62,10 @@ const HomeScreen = async () => {
         <TableHeader>
           <TableRow>
             <TableHead>時限</TableHead>
-            <TableHead>科目</TableHead>
+            <TableHead className='flex items-center justify-between'>
+              科目
+              <ImportTimeTableButton />
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
