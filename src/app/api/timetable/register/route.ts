@@ -3,9 +3,7 @@ import { handleAPIError } from '@/lib/handleAPIError';
 import { prisma } from '@/lib/prisma';
 import { NextRequest, NextResponse } from 'next/server';
 
-type TimeTable = {
-  [periodNumber: number]: string[];
-};
+type TimeTable = { [periodNumber: number]: string[] };
 
 export const POST = async (req: NextRequest) =>
   handleAPIError(async () => {
@@ -43,11 +41,7 @@ const registerLectureFacade = async (
 };
 
 const checkLectureExist = async (lectureName: string) => {
-  const lecture = await prisma.lecture.findFirst({
-    where: {
-      name: lectureName,
-    },
-  });
+  const lecture = await prisma.lecture.findFirst({ where: { name: lectureName } });
 
   const isExist = lecture !== null;
 
@@ -55,21 +49,13 @@ const checkLectureExist = async (lectureName: string) => {
 };
 
 const registerLecture = async (lectureName: string) => {
-  const lecture = await prisma.lecture.create({
-    data: {
-      name: lectureName,
-    },
-  });
+  const lecture = await prisma.lecture.create({ data: { name: lectureName } });
 
   return lecture;
 };
 
 const getLectureId = async (lectureName: string) => {
-  const lecture = await prisma.lecture.findFirst({
-    where: {
-      name: lectureName,
-    },
-  });
+  const lecture = await prisma.lecture.findFirst({ where: { name: lectureName } });
 
   return lecture?.id;
 };
