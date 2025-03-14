@@ -34,8 +34,6 @@ const periodInfos: PeriodInfo[] = [
 const getDayOfWeek = () => {
   const daysOfWeek = ['日曜日', '月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日'];
   const today = new Date().getDay();
-  // 日曜日の場合は平日のデータがないので月曜日（1）を返す
-  // JavaScriptでは日曜日は0だが、データベースでは1が月曜日
   const dayNumber = today;
   return {
     name: daysOfWeek[today],
@@ -77,8 +75,6 @@ const HomeScreen = ({ user }: { user: User | undefined }) => {
     const FetchTimeTable = async () => {
       try {
         const today = getDayOfWeek();
-        console.log('今日の曜日:', today.name, '(番号:', today.number, ')');
-        console.log('path:', `/api/timetable/get/${today.name}`);
         // 曜日名をパスパラメータとして送信
         const response = await fetch(`api/timetable/get/${today.name}`, {
           method: 'GET',
@@ -86,10 +82,7 @@ const HomeScreen = ({ user }: { user: User | undefined }) => {
             'Content-Type': 'application/json',
           },
         });
-
-        console.log('APIレスポンスステータス:', response.status);
         const data = await response.json();
-        console.log('APIレスポンスデータ:', data);
 
         if (data.data && Array.isArray(data.data)) {
           const formattedData = data.data.map((item: any) => {
@@ -108,7 +101,6 @@ const HomeScreen = ({ user }: { user: User | undefined }) => {
               endTime: periodInfo.endTime,
             };
           });
-          console.log('フォーマット後のデータ:', formattedData);
           setTodayTimetable(formattedData);
         } else {
           console.log('データ形式が予期しないものです:', data);
@@ -120,7 +112,7 @@ const HomeScreen = ({ user }: { user: User | undefined }) => {
       }
     };
     FetchTimeTable();
-  }, [isLoading]);
+  }, [isLoading, setTodayTimetable, sampleTimeTable]);
 
   // 表示用のデータ（APIから取得したデータ、またはフォールバック）
   const displayTimeTable = todayTimetable.length > 0 ? todayTimetable : sampleTimeTable;
