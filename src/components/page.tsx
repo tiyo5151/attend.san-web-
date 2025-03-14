@@ -1,4 +1,5 @@
-import { auth } from '@/auth';
+'use client';
+
 import ImportTimeTableButton from '@/components/ImportTimeTableButton';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card } from '@/components/ui/card';
@@ -13,10 +14,10 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { UserMenu } from '@/components/UserMenu';
+import { User } from 'next-auth';
 
-const HomeScreen = async () => {
+const HomeScreen = ({ user }: { user: User | undefined }) => {
   const progress = 50;
-  const session = await auth();
 
   const sampleTimeTable = [
     {
@@ -48,7 +49,7 @@ const HomeScreen = async () => {
   return (
     <div className='container mx-auto grid grid-cols-1 gap-4 p-4 md:grid-cols-2 lg:grid-cols-3'>
       <Card className='col-span-1 flex items-center p-1'>
-        <UserMenu user={session?.user} className='size-full rounded-lg' />
+        <UserMenu user={user} className='size-full rounded-lg' />
       </Card>
 
       <Card className='col-start-3 p-4'>
