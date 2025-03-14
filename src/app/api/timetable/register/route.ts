@@ -15,7 +15,11 @@ export const POST = async (req: NextRequest) =>
       lectures.map((lectureName: string, dayNumber: number) => {
         if (lectureName === '') return;
 
-        registerLectureFacade(lectureName, Number(periodNumber), dayNumber);
+        //dayNumber : (月曜日 ~ 日曜日) が (0 ~ 6)
+        //これを１足して (月曜日 ~ 日曜日) が (1 ~ 7) に変換
+        const tm_wday = dayNumber + 1;
+
+        registerLectureFacade(lectureName, Number(periodNumber), tm_wday);
       });
     });
 
