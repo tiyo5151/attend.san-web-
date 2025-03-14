@@ -15,36 +15,107 @@ import {
 } from '@/components/ui/table';
 import { UserMenu } from '@/components/UserMenu';
 import { User } from 'next-auth';
+import { useEffect, useState } from 'react';
+interface PeriodInfo {
+  periodNumber: string;
+  beginTime: string;
+  endTime: string;
+}
+// 時限情報の配列
+const periodInfos: PeriodInfo[] = [
+  { periodNumber: '1', beginTime: '9:00', endTime: '10:30' },
+  { periodNumber: '2', beginTime: '10:40', endTime: '12:10' },
+  { periodNumber: '3', beginTime: '13:00', endTime: '14:30' },
+  { periodNumber: '4', beginTime: '14:45', endTime: '16:15' },
+  { periodNumber: '5', beginTime: '16:30', endTime: '18:00' },
+  { periodNumber: '6', beginTime: '18:15', endTime: '19:45' },
+];
+
+const getDayOfWeek = () => {
+  const daysOfWeek = ['日曜日', '月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日'];
+  const today = new Date().getDay();
+  const dayNumber = today;
+  return {
+    name: daysOfWeek[today],
+    number: dayNumber,
+  };
+};
 
 const HomeScreen = ({ user }: { user: User | undefined }) => {
   const progress = 50;
+  const [todayTimetable, setTodayTimetable] = useState<
+    {
+      period: string;
+      subject: string;
+      beginTime?: string;
+      endTime?: string;
+    }[]
+  >([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const sampleTimeTable = [
-    {
-      period: '1',
-      subject: '',
-    },
-    {
-      period: '2',
-      subject: '情報連携学概論II',
-    },
-    {
-      period: '3',
-      subject: '情報連携基礎実習II/情報連携実習IB3',
-    },
-    {
-      period: '4',
-      subject: '',
-    },
-    {
-      period: '5',
-      subject: '',
-    },
-    {
-      period: '6',
-      subject: 'マクロ経済学日本語',
-    },
-  ];
+  const sampleTimeTable = periodInfos.map((info) => ({
+    period: info.periodNumber,
+    subject: (() => {
+      switch (info.periodNumber) {
+        case '2':
+          return '情報連携学概論II';
+        case '3':
+          return '情報連携基礎実習II/情報連携実習IB3';
+        case '6':
+          return 'マクロ経済学日本語';
+        default:
+          return '';
+      }
+    })(),
+    beginTime: info.beginTime,
+    endTime: info.endTime,
+  }));
+
+  useEffect(() => {
+    const FetchTimeTable = async () => {
+      try {
+        const today = getDayOfWeek();
+        // 曜日名をパスパラメータとして送信
+        const response = await fetch(`api/timetable/get/${today.name}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        const data = await response.json();
+
+        if (data.data && Array.isArray(data.data)) {
+          const formattedData = data.data.map((item: any) => {
+            // DBから取得したperiodNumberに基づいて時間情報を取得
+            const periodInfo = periodInfos.find(
+              (p) => p.periodNumber === String(item.periodNumber),
+            ) || {
+              beginTime: '',
+              endTime: '',
+            };
+
+            return {
+              period: String(item.periodNumber) || '',
+              subject: item.lecture?.name || '',
+              beginTime: periodInfo.beginTime,
+              endTime: periodInfo.endTime,
+            };
+          });
+          setTodayTimetable(formattedData);
+        } else {
+          console.log('データ形式が予期しないものです:', data);
+          setTodayTimetable(sampleTimeTable);
+        }
+      } catch (error) {
+        console.error('時間割の取得に失敗しました:', error);
+        setTodayTimetable(sampleTimeTable);
+      }
+    };
+    FetchTimeTable();
+  }, [isLoading, setTodayTimetable, sampleTimeTable]);
+
+  // 表示用のデータ（APIから取得したデータ、またはフォールバック）
+  const displayTimeTable = todayTimetable.length > 0 ? todayTimetable : sampleTimeTable;
 
   return (
     <div className='container mx-auto grid grid-cols-1 gap-4 p-4 md:grid-cols-2 lg:grid-cols-3'>
@@ -59,20 +130,26 @@ const HomeScreen = ({ user }: { user: User | undefined }) => {
       </Card>
 
       <Table className='col-span-1 row-span-2 row-start-2'>
-        <TableCaption>時間割</TableCaption>
+        <TableCaption>今日（{getDayOfWeek().name}）の時間割</TableCaption>
         <TableHeader>
           <TableRow>
             <TableHead>時限</TableHead>
-            <TableHead className='flex items-center justify-between'>
-              科目
-              <ImportTimeTableButton />
+            <TableHead>科目</TableHead>
+            <TableHead>
+              {' '}
+              <ImportTimeTableButton isLoading={isLoading} setIsLoading={setIsLoading} />
             </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {sampleTimeTable.map((item, index) => (
+          {displayTimeTable.map((item, index) => (
             <TableRow key={index}>
               <TableCell>{item.period}</TableCell>
+              <TableCell>
+                {item.beginTime && item.endTime
+                  ? `${item.beginTime}～${item.endTime}`
+                  : '時間未設定'}
+              </TableCell>
               <TableCell>{item.subject}</TableCell>
             </TableRow>
           ))}

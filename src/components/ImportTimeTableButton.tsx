@@ -1,9 +1,13 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 
-const ImportTimeTableButton = () => {
-  const [isLoading, setIsLoading] = useState(false);
+interface ImportTimeTableButtonProps {
+  isLoading: boolean;
+  setIsLoading: (isLoading: boolean) => void;
+}
+
+const ImportTimeTableButton = ({ isLoading, setIsLoading }: ImportTimeTableButtonProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileSelect = () => {
